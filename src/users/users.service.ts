@@ -12,6 +12,7 @@ export class UsersService {
     dto.password = hashedPassword;
     let user = this.repo.create(dto);
     user = await this.repo.save(user);
+    delete user.password;
 
     return user;
   }
