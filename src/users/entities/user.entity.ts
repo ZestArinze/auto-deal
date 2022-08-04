@@ -1,13 +1,15 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
+import { Role } from '../../auth/entities/role.entity';
+import { AppBaseEntity } from '../../common/entities/app-base-entity';
 
 @Entity()
-export class User {
+export class User extends AppBaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,9 +22,7 @@ export class User {
   @Column()
   name: string;
 
-  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  @ManyToMany(() => Role)
+  @JoinTable()
+  roles: Role[];
 }
