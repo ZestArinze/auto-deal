@@ -1,42 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { RegistrationInput } from '../auth/dto/registration.input';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  private readonly users: Partial<User>[] = [
-    {
-      id: 1,
-      email: 'lucy@example.com',
-      password: 'password',
-      name: 'Lucy Woo',
-    },
-    {
-      id: 2,
-      email: 'john@example.com',
-      password: 'secret',
-      name: 'John Doe',
-    },
-  ];
+  constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(dto: RegistrationInput, hashedPassword: string): Promise<User> {
+    dto.password = hashedPassword;
+    let user = this.repo.create(dto);
+    user = await this.repo.save(user);
+    delete user.password;
+
+    return user;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findOne(email: string, selectSecrets = false) {
+    const query = this.repo
+      .createQueryBuilder('user')
+      .select('user')
+      .where('user.email = :email', { email });
+
+    if (selectSecrets) {
+      query.addSelect(['user.password']);
+    }
+
+    const user = await query.getOne();
+
+    console.log({ user });
+
+    return user;
   }
 
-  async findOne(email: string) {
-    return this.users.find((user) => user.email === email);
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async findById(id: number) {
+    return this.repo.findOne({ where: { id: id } });
   }
 }

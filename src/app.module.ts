@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ValidationError } from 'class-validator';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -21,7 +22,10 @@ import { UsersModule } from './users/users.module';
         const options: TypeOrmModuleOptions = {
           type: 'sqlite',
           database: 'test.sqlite',
-          entities: [join(process.cwd(), 'src/**/*.entity.ts')],
+          entities: [__dirname + '/../**/*.entity.js'],
+          synchronize:
+            process.env.NODE_ENV === 'development' &&
+            parseInt(configService.get<string>('SYNC_DATABASE', '0')) === 1,
         };
 
         return options;
@@ -37,6 +41,13 @@ import { UsersModule } from './users/users.module';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
     },
   ],
 })
