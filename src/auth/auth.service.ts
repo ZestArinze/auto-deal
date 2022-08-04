@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { RegistrationInput } from './dto/registration.input';
+import { JwtPayload } from './dto/jwt-payload.input';
 
 @Injectable()
 export class AuthService {
@@ -76,5 +77,26 @@ export class AuthService {
     const user = await this.usersService.create(dto, hash);
 
     return user;
+  }
+
+  async findJwtUser(payload: JwtPayload): Promise<User | undefined> {
+    const user = await this.usersService.findOne(payload.username);
+    if (!user) {
+      return undefined;
+    }
+
+    return user;
+  }
+
+  otpMessgae(data: {
+    token: string;
+    tokenExpiryInfo: string;
+    purpose: string;
+  }) {
+    return `Your ${this.configService.get<string>('APP_NAME')} ${
+      data.purpose
+    } OTP is ${data.token}  Note that the OTP expires after ${
+      data.tokenExpiryInfo
+    }.`;
   }
 }
