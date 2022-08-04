@@ -21,6 +21,7 @@ export class UsersService {
     const query = this.repo
       .createQueryBuilder('user')
       .select('user')
+      .leftJoinAndSelect('user.roles', 'role')
       .where('user.email = :email', { email });
 
     if (selectSecrets) {
@@ -34,5 +35,14 @@ export class UsersService {
 
   async findById(id: number) {
     return this.repo.findOne({ where: { id: id } });
+  }
+
+  async getMany() {
+    const query = this.repo.createQueryBuilder('user').select('user');
+    const user = await query.getMany();
+
+    // TODO: paginate, search...
+
+    return user;
   }
 }

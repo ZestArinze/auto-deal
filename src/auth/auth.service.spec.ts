@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { GenericObject } from '../common/generics';
+import { typeormPartialMock } from '../common/utils/test.utils';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
@@ -29,10 +30,12 @@ describe('AuthService', () => {
     }),
 
     createQueryBuilder: jest.fn(() => ({
-      where: jest.fn().mockReturnThis(),
-      select: jest.fn().mockReturnThis(),
-      addSelect: jest.fn().mockReturnThis(),
+      ...typeormPartialMock,
+
       getOne: jest.fn().mockReturnValueOnce({ id: Date.now(), ...signupDto }),
+      getMany: jest
+        .fn()
+        .mockReturnValueOnce([{ id: Date.now(), ...signupDto }]),
     })),
 
     save: jest.fn().mockImplementation((dto) => {
