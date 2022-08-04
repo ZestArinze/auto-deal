@@ -12,7 +12,6 @@ export class UsersService {
     dto.password = hashedPassword;
     let user = this.repo.create(dto);
     user = await this.repo.save(user);
-    delete user.password;
 
     return user;
   }
@@ -28,8 +27,6 @@ export class UsersService {
     }
 
     const user = await query.getOne();
-
-    console.log({ user });
 
     return user;
   }
