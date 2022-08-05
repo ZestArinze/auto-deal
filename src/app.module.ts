@@ -10,6 +10,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
 import { CaslModule } from './casl/casl.module';
 import { SeederModule } from './database/seeder.module';
 import { UsersModule } from './users/users.module';
+import { SellersModule } from './sellers/sellers.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     CaslModule,
     SeederModule,
+    SellersModule,
   ],
   controllers: [AppController],
   providers: [

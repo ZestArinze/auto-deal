@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RegistrationInput } from '../auth/dto/registration.input';
+import { GetUsersDto } from './dto/get-users.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -37,12 +38,25 @@ export class UsersService {
     return this.repo.findOne({ where: { id: id } });
   }
 
-  async getMany() {
-    const query = this.repo.createQueryBuilder('user').select('user');
-    const user = await query.getMany();
+  async findMany(dto: GetUsersDto) {
+    const query = this.searchQuery(dto);
 
     // TODO: paginate, search...
+    const users = await query
+      .select('user')
+      .leftJoinAndSelect('user.roles', 'role')
+      .getMany();
 
-    return user;
+    return users;
+  }
+
+  searchQuery(dto: Partial<GetUsersDto>) {
+    const query = this.repo.createQueryBuilder('user');
+
+    if (dto.userIds) {
+      query.where('user.id IN (:...userIds)', { userIds: dto.userIds });
+    }
+
+    return query;
   }
 }

@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { GenericObject } from '../common/generics';
 import { typeormPartialMock } from '../common/utils/test.utils';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -25,7 +24,7 @@ describe('UsersService', () => {
     save: jest.fn().mockImplementation((dto) => {
       return Promise.resolve({ id: Date.now(), ...dto });
     }),
-    findOne: jest.fn().mockImplementation((dto: GenericObject) =>
+    findOne: jest.fn().mockImplementation(() =>
       Promise.resolve({
         id: Date.now(),
         ...userData,
