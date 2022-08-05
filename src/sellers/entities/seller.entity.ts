@@ -15,7 +15,7 @@ export class Seller extends AppBaseEntity {
   @Column()
   address: string;
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, { onDelete: 'CASCADE' })
   @JoinTable({ name: 'user_id' })
   users: User[];
 }
