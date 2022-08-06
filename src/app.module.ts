@@ -11,6 +11,7 @@ import { CaslModule } from './casl/casl.module';
 import { SeederModule } from './database/seeder.module';
 import { UsersModule } from './users/users.module';
 import { SellersModule } from './sellers/sellers.module';
+import { CarsModule } from './cars/cars.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { SellersModule } from './sellers/sellers.module';
     CaslModule,
     SeederModule,
     SellersModule,
+    CarsModule,
   ],
   controllers: [AppController],
   providers: [
