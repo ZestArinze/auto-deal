@@ -1,6 +1,6 @@
 # Auto Deals - Car Rentals API
 
-An Node js API for car rentals... for demonstration purposes. Build with love with Nest js.
+An Node js API for car rentals... for demonstration purposes. Built with love with Nest js.
 
 ## Installation
 
@@ -8,6 +8,8 @@ An Node js API for car rentals... for demonstration purposes. Build with love wi
 $ git clone https://github.com/ZestArinze/auto-deal.git
 $ npm install
 ```
+
+create .env file at the project root, copy content of .env.example to .env and set values according to your requirements
 
 ## Running the app
 
@@ -30,7 +32,7 @@ $ npm run test
 
 ## License
 
-[MIT licensed](LICENSE).
+MIT [MIT licensed](LICENSE).
 
 # auto-deal
 ```
