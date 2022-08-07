@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { Public } from '../auth/constants';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Action } from '../auth/enums/permission.action';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
@@ -32,22 +33,32 @@ export class CarsController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.carsService.findAll();
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
     return this.carsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto) {
+  update(
+    @CurrentUser() user: User,
+    @Param('id') id: string,
+    @Body() updateCarDto: UpdateCarDto,
+  ) {
+    checkAbility(this.abilityFactory, user, Action.Manage, Car);
+
     return this.carsService.update(+id, updateCarDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@CurrentUser() user: User, @Param('id') id: string) {
+    checkAbility(this.abilityFactory, user, Action.Manage, Car);
+
     return this.carsService.remove(+id);
   }
 }

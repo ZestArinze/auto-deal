@@ -61,7 +61,15 @@ describe('CarsService', () => {
       vehicle_id: 'lmop',
     })),
 
-    getMany: jest.fn().mockReturnValue([{ ...carData, users: [seller] }]),
+    findOne: jest.fn().mockImplementation((id: number) => ({
+      ...carData,
+      id: id,
+      vehicle_id: 'lmop',
+    })),
+
+    getMany: jest
+      .fn()
+      .mockReturnValue([{ ...carData, id: Date.now(), vehicle_id: 'abcd' }]),
   };
 
   beforeEach(async () => {
@@ -113,5 +121,12 @@ describe('CarsService', () => {
       vehicle_number: carData.vehicle_number,
       vehicle_id: expect.any(String),
     });
+  });
+
+  it('should update car', async () => {
+    const car = await service.create(carData);
+    const result = await service.update(car.id, { ...car, price: 10000000 });
+
+    expect(result.price).toEqual(10000000);
   });
 });

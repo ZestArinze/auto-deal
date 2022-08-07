@@ -1,4 +1,5 @@
 import { IsInt, IsNumber, IsString } from 'class-validator';
+import { IsExists } from '../../common/validators/is-exists.validator';
 
 export class CreateCarDto {
   @IsNumber()
@@ -32,6 +33,13 @@ export class CreateCarDto {
   vehicle_number: string;
 
   @IsInt()
+  @IsExists({
+    context: {
+      table: 'brand',
+      col: 'id',
+      inputProperty: 'brand_id',
+    },
+  })
   brand_id: number;
 
   @IsInt()

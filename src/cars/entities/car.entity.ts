@@ -1,4 +1,4 @@
-import { Column, Entity, Generated, ManyToOne } from 'typeorm';
+import { Column, Entity, Generated, JoinColumn, ManyToOne } from 'typeorm';
 import { AppBaseEntity } from '../../common/entities/app-base-entity';
 import { Seller } from '../../sellers/entities/seller.entity';
 import { Brand } from './brand.entity';
@@ -40,12 +40,21 @@ export class Car extends AppBaseEntity {
   @Column()
   exterior_color: string;
 
+  @Column()
+  brand_id: number;
   @ManyToOne(() => Brand, (brand) => brand.cars)
+  @JoinColumn({ name: 'brand_id' })
   brand: Brand;
 
+  @Column()
+  car_category_id: number;
   @ManyToOne(() => CarCategory, (carCategory) => carCategory.cars)
+  @JoinColumn({ name: 'car_category_id' })
   carCategory: CarCategory;
 
+  @Column()
+  seller_id: number;
   @ManyToOne(() => Seller, (seller) => seller.cars)
+  @JoinColumn({ name: 'seller_id' })
   seller: Seller;
 }

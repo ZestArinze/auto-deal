@@ -12,6 +12,7 @@ import { SeederModule } from './database/seeder.module';
 import { UsersModule } from './users/users.module';
 import { SellersModule } from './sellers/sellers.module';
 import { CarsModule } from './cars/cars.module';
+import { IsExistsConstraint } from './common/validators/is-exists.validator';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { CarsModule } from './cars/cars.module';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    IsExistsConstraint,
   ],
 })
 export class AppModule {}
