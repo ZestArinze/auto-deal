@@ -17,7 +17,7 @@ describe('SellersService', () => {
     userIds: [1],
   };
 
-  const user1 = {
+  const user = {
     id: 1,
     email: 'lucy@example.com',
   };
@@ -36,16 +36,16 @@ describe('SellersService', () => {
     getOne: jest.fn().mockImplementation((id: number) => ({
       ...sellerData,
       id: id,
-      users: [user1],
+      users: [user],
     })),
 
     findOne: jest.fn().mockReturnValue({
       ...sellerData,
       id: Date.now(),
-      users: [user1],
+      users: [user],
     }),
 
-    getMany: jest.fn().mockReturnValue([{ ...sellerData, users: [user1] }]),
+    getMany: jest.fn().mockReturnValue([{ ...sellerData, users: [user] }]),
   };
 
   // const userRepoMock = {
@@ -53,7 +53,7 @@ describe('SellersService', () => {
   //   getMany: jest.fn().mockReturnValue([{ ...sellerData, id: Date.now() }]),
   //   findOne: jest.fn().mockImplementation((id: number) =>
   //     Promise.resolve({
-  //       ...user1,
+  //       ...user,
   //       id: id,
   //     }),
   //   ),

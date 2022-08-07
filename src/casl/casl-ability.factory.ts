@@ -9,6 +9,7 @@ import { Injectable } from '@nestjs/common';
 import { Role } from '../auth/entities/role.entity';
 import { Action } from '../auth/enums/permission.action';
 import { RoleEnum } from '../auth/enums/role.enum';
+import { Car } from '../cars/entities/car.entity';
 import { userHasRole } from '../common/utils/auth.utils';
 import { Seller } from '../sellers/entities/seller.entity';
 import { User } from '../users/entities/user.entity';
@@ -17,6 +18,7 @@ type Subjects =
   | InferSubjects<typeof User>
   | typeof Role
   | typeof Seller
+  | typeof Car
   | 'all';
 
 export type AppAbility = Ability<[Action, Subjects]>;
@@ -33,7 +35,9 @@ export class CaslAbilityFactory {
     } else if (userHasRole(user, RoleEnum.Admin)) {
       can(Action.Manage, User);
       can(Action.Manage, Seller);
+      can(Action.Manage, Car);
     } else if (userHasRole(user, RoleEnum.Editor)) {
+      can(Action.Manage, Car);
     }
 
     can(Action.ManageOwn, User, { id: user.id });

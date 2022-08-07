@@ -1,4 +1,5 @@
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { Car } from '../../cars/entities/car.entity';
 import { AppBaseEntity } from '../../common/entities/app-base-entity';
 import { User } from '../../users/entities/user.entity';
 
@@ -18,4 +19,7 @@ export class Seller extends AppBaseEntity {
   @ManyToMany(() => User, { onDelete: 'CASCADE' })
   @JoinTable({ name: 'user_id' })
   users: User[];
+
+  @OneToMany(() => Car, (car) => car.seller)
+  cars: Car[];
 }
