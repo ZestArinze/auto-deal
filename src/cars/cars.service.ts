@@ -19,12 +19,22 @@ export class CarsService {
     return `This action returns all cars`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} car`;
+  async findOne(id: number) {
+    return this.repo
+      .createQueryBuilder('car')
+      .where('car.id = :id', { id: id })
+      .leftJoin('car.seller', 'seller')
+      .leftJoin('car.carCategory', 'carCategory')
+      .leftJoin('car.brand', 'brand')
+      .select(['car', 'seller', 'carCategory', 'brand'])
+      .getOne();
   }
 
-  update(id: number, updateCarDto: UpdateCarDto) {
-    return `This action updates a #${id} car`;
+  async update(id: number, dto: UpdateCarDto) {
+    const car = await this.repo.findOne({ where: { id: id } });
+    Object.assign(car, dto, { id: car.id });
+
+    return this.repo.save(car);
   }
 
   remove(id: number) {

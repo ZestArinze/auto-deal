@@ -1,13 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { typeormPartialMock } from '../common/utils/test.utils';
-import { Seller } from '../sellers/entities/seller.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
-import { Brand } from './entities/brand.entity';
-import { CarCategory } from './entities/car-category.entity';
 import { Car } from './entities/car.entity';
 import { CarBrand, Category } from './enums';
 
@@ -61,14 +58,8 @@ describe('CarsService', () => {
     getOne: jest.fn().mockImplementation((id: number) => ({
       ...carData,
       id: id,
-      users: [seller],
+      vehicle_id: 'lmop',
     })),
-
-    findOne: jest.fn().mockReturnValue({
-      ...carData,
-      id: Date.now(),
-      users: [seller],
-    }),
 
     getMany: jest.fn().mockReturnValue([{ ...carData, users: [seller] }]),
   };
@@ -99,8 +90,6 @@ describe('CarsService', () => {
   it('should create car', async () => {
     const result = await service.create(carData);
 
-    console.log({ result });
-
     expect(result).toMatchObject({
       id: expect.any(Number),
       vehicle_id: expect.any(String),
@@ -113,6 +102,16 @@ describe('CarsService', () => {
       year: carData.year,
       price: carData.price,
       vehicle_number: carData.vehicle_number,
+    });
+  });
+
+  it('should get a car', async () => {
+    const car = await service.create(carData);
+    const result = await service.findOne(car.id);
+
+    expect(result).toMatchObject({
+      vehicle_number: carData.vehicle_number,
+      vehicle_id: expect.any(String),
     });
   });
 });

@@ -7,6 +7,7 @@ import { CarCategory } from './car-category.entity';
 @Entity()
 export class Car extends AppBaseEntity {
   @Generated('uuid')
+  @Column()
   vehicle_id: string;
 
   @Column()
