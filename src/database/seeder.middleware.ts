@@ -2,7 +2,10 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { EntityManager } from 'typeorm';
+import { BrandSeeder } from './seeders/brand.seeder';
+import { CarCategorySeeder } from './seeders/car-category.seeder';
 import { RoleSeeder } from './seeders/role.seeder';
+import { SellerSeeder } from './seeders/seller.seeder';
 
 import { UserSeeder } from './seeders/user.seeder';
 
@@ -31,6 +34,10 @@ export class SeederMiddleware implements NestMiddleware {
     this.isSeedingComplete = (async () => {
       await new RoleSeeder(this.entityManager).seed();
       await new UserSeeder(this.entityManager).seed();
+      await new CarCategorySeeder(this.entityManager).seed();
+      await new BrandSeeder(this.entityManager).seed();
+      await new SellerSeeder(this.entityManager).seed();
+
       return true;
     })();
 
